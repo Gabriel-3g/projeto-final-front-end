@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - VidaPlus</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            padding: 3rem;
+            width: 100%;
+            max-width: 450px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1976d2, #42a5f5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #374151;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #1976d2;
+            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 1.1rem;
+        }
+
+        .form-group input:focus + .input-icon {
+            color: #1976d2;
+        }
+
+        .perfil-selector {
+            margin-bottom: 2rem;
+        }
+
+        .perfil-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .perfil-option {
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        .perfil-option:hover {
+            border-color: #1976d2;
+            transform: translateY(-2px);
+        }
+
+        .perfil-option.selected {
+            border-color: #1976d2;
+            background: linear-gradient(135deg, #1976d2, #42a5f5);
+            color: white;
+        }
+
+        .perfil-option i {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .perfil-option span {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #1976d2, #42a5f5);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(25, 118, 210, 0.3);
+        }
+
+        .btn-login:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .success-message {
+            background: #dcfce7;
+            color: #16a34a;
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .demo-credentials {
+            background: #f3f4f6;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .demo-credentials h4 {
+            color: #374151;
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .credential-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .credential-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .credential-label {
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .credential-value {
+            color: #374151;
+            font-weight: 600;
+            font-family: monospace;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #1976d2;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsividade melhorada */
+        @media (max-width: 1200px) {
+            .login-container {
+                max-width: 500px;
+                margin: 2% auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .login-container {
+                max-width: 95vw;
+                margin: 1% auto;
+                padding: 2rem 1.5rem;
+            }
+            
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .form-group label {
+                font-size: 0.95rem;
+            }
+            
+            .input-container input {
+                padding: 0.9rem 1rem 0.9rem 3rem;
+                font-size: 0.95rem;
+            }
+            
+            .input-icon {
+                font-size: 1rem;
+            }
+            
+            .btn-login {
+                padding: 0.9rem 2rem;
+                font-size: 0.95rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .login-container {
+                padding: 1.5rem 1rem;
+                margin: 0.5% auto;
+            }
+            
+            .logo {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 0.9rem;
+            }
+            
+            .form-group {
+                margin-bottom: 1.2rem;
+            }
+            
+            .form-group label {
+                font-size: 0.9rem;
+                margin-bottom: 0.4rem;
+            }
+            
+            .input-container input {
+                padding: 0.8rem 1rem 0.8rem 2.8rem;
+                font-size: 0.9rem;
+            }
+            
+            .input-icon {
+                font-size: 0.9rem;
+                left: 1rem;
+            }
+            
+            .btn-login {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+            }
+            
+            .demo-credentials {
+                padding: 1rem;
+            }
+            
+            .demo-credentials h4 {
+                font-size: 0.9rem;
+            }
+            
+            .credential-item {
+                font-size: 0.8rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 1rem 0.8rem;
+                margin: 0;
+                border-radius: 0;
+                min-height: 100vh;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 0.85rem;
+            }
+            
+            .perfil-options {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+            
+            .perfil-option {
+                padding: 0.8rem;
+            }
+            
+            .perfil-option i {
+                font-size: 1.2rem;
+            }
+            
+            .perfil-option span {
+                font-size: 0.9rem;
+            }
+            
+            .form-group label {
+                font-size: 0.85rem;
+            }
+            
+            .input-container input {
+                padding: 0.7rem 1rem 0.7rem 2.5rem;
+                font-size: 0.85rem;
+            }
+            
+            .input-icon {
+                font-size: 0.85rem;
+                left: 0.8rem;
+            }
+            
+            .btn-login {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.85rem;
+            }
+            
+            .demo-credentials {
+                padding: 0.8rem;
+            }
+            
+            .demo-credentials h4 {
+                font-size: 0.85rem;
+            }
+            
+            .credential-item {
+                font-size: 0.75rem;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .login-container {
+                padding: 0.8rem 0.5rem;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 0.8rem;
+            }
+            
+            .form-group {
+                margin-bottom: 1rem;
+            }
+            
+            .input-container input {
+                padding: 0.6rem 0.8rem 0.6rem 2.2rem;
+                font-size: 0.8rem;
+            }
+            
+            .input-icon {
+                font-size: 0.8rem;
+                left: 0.6rem;
+            }
+            
+            .btn-login {
+                padding: 0.6rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo-section">
+            <div class="logo">VidaPlus</div>
+            <div class="subtitle">Sistema de Gestão de Saúde</div>
+        </div>
+
+        <div class="error-message" id="error-message"></div>
+        <div class="success-message" id="success-message"></div>
+
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <div class="input-container">
+                    <input type="email" id="email" name="email" required>
+                    <i class="fas fa-envelope input-icon"></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <div class="input-container">
+                    <input type="password" id="password" name="password" required>
+                    <i class="fas fa-lock input-icon"></i>
+                </div>
+            </div>
+
+            <div class="form-group perfil-selector">
+                <label>Selecione seu perfil</label>
+                <div class="perfil-options">
+                    <div class="perfil-option" data-perfil="admin">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Admin</span>
+                    </div>
+                    <div class="perfil-option" data-perfil="profissional">
+                        <i class="fas fa-user-md"></i>
+                        <span>Profissional</span>
+                    </div>
+                    <div class="perfil-option" data-perfil="paciente">
+                        <i class="fas fa-user"></i>
+                        <span>Paciente</span>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-login" id="btn-login">
+                Entrar no Sistema
+            </button>
+        </form>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <div>Entrando no sistema...</div>
+        </div>
+
+        <div class="demo-credentials">
+            <h4>Credenciais de Demonstração</h4>
+            <div class="credential-item">
+                <span class="credential-label">Admin:</span>
+                <span class="credential-value">admin@vidplus.com / admin123</span>
+            </div>
+            <div class="credential-item">
+                <span class="credential-label">Profissional:</span>
+                <span class="credential-value">prof@vidplus.com / prof123</span>
+            </div>
+            <div class="credential-item">
+                <span class="credential-label">Paciente:</span>
+                <span class="credential-value">paciente@vidplus.com / paciente123</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Credenciais de demonstração
+        const credentials = {
+            'admin@vidplus.com': { password: 'admin123', perfil: 'admin' },
+            'prof@vidplus.com': { password: 'prof123', perfil: 'profissional' },
+            'paciente@vidplus.com': { password: 'paciente123', perfil: 'paciente' }
+        };
+
+        // URLs dos painéis
+        const painelUrls = {
+            'admin': 'painel-admin.html',
+            'profissional': 'painel-profissional.html',
+            'paciente': 'painel-paciente.html'
+        };
+
+        let selectedPerfil = null;
+
+        // Seleção de perfil
+        document.querySelectorAll('.perfil-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.perfil-option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedPerfil = this.dataset.perfil;
+            });
+        });
+
+        // Função para mostrar mensagens
+        function showMessage(type, message) {
+            const errorDiv = document.getElementById('error-message');
+            const successDiv = document.getElementById('success-message');
+            
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            
+            if (type === 'error') {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+            } else if (type === 'success') {
+                successDiv.textContent = message;
+                successDiv.style.display = 'block';
+            }
+        }
+
+        // Função para mostrar/esconder loading
+        function toggleLoading(show) {
+            const loading = document.getElementById('loading');
+            const btnLogin = document.getElementById('btn-login');
+            
+            if (show) {
+                loading.style.display = 'block';
+                btnLogin.disabled = true;
+                btnLogin.textContent = 'Entrando...';
+            } else {
+                loading.style.display = 'none';
+                btnLogin.disabled = false;
+                btnLogin.textContent = 'Entrar no Sistema';
+            }
+        }
+
+        // Validação do formulário
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            
+            // Validações básicas
+            if (!email || !password) {
+                showMessage('error', 'Por favor, preencha todos os campos.');
+                return;
+            }
+            
+            if (!selectedPerfil) {
+                showMessage('error', 'Por favor, selecione um perfil.');
+                return;
+            }
+            
+            // Verificar credenciais
+            if (credentials[email]) {
+                const userCred = credentials[email];
+                
+                if (userCred.password === password && userCred.perfil === selectedPerfil) {
+                    showMessage('success', 'Login realizado com sucesso! Redirecionando...');
+                    toggleLoading(true);
+                    
+                    // Simular delay de carregamento
+                    setTimeout(() => {
+                        window.location.href = painelUrls[selectedPerfil];
+                    }, 1500);
+                } else {
+                    showMessage('error', 'Email, senha ou perfil incorretos.');
+                }
+            } else {
+                showMessage('error', 'Credenciais inválidas. Use as credenciais de demonstração.');
+            }
+        });
+
+        // Auto-preenchimento para demonstração
+        document.addEventListener('DOMContentLoaded', function() {
+            // Adicionar listeners para auto-seleção de perfil baseado no email
+            document.getElementById('email').addEventListener('input', function() {
+                const email = this.value.trim();
+                if (credentials[email]) {
+                    const perfil = credentials[email].perfil;
+                    document.querySelectorAll('.perfil-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                        if (opt.dataset.perfil === perfil) {
+                            opt.classList.add('selected');
+                            selectedPerfil = perfil;
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

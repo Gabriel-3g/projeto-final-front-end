@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Administrador | VidaPlus</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: #f6f7fb;
+            margin: 0;
+            color: #22304a;
+        }
+        .painel-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        .menu-lateral {
+            background: linear-gradient(160deg, #d32f2f 0%, #b71c1c 100%);
+            color: #fff;
+            width: 350px;
+            min-width: 220px;
+            padding: 2.5rem 2rem 2rem 2rem;
+            flex-direction: column;
+            align-items: flex-start;
+            box-shadow: 2px 0 24px 0 rgba(34,48,74,0.08);
+        }
+        .logo-admin {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 2.5rem;
+            color: #fff;
+        }
+        .info-admin {
+            width: 100%;
+            margin-bottom: 2.5rem;
+        }
+        .info-admin h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        .info-admin .cargo {
+            font-size: 1rem;
+            color: #ffcdd2;
+            margin-bottom: 0.5rem;
+        }
+        .info-admin .email {
+            font-size: 0.95rem;
+            color: #fff;
+            opacity: 0.85;
+        }
+        .btn-sair {
+            margin-top: auto;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(211,47,47,0.08);
+        }
+        .btn-sair:hover {
+            box-shadow: 0 4px 16px rgba(211,47,47,0.15);
+        }
+        .btn-sair svg {
+            width: 1.2em;
+            height: 1.2em;
+        }
+        .conteudo-painel {
+            flex: 1;
+            padding: 2.5rem 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        .cabecalho-painel {
+            position: relative;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.2rem;
+            margin-bottom: 2.5rem;
+        }
+        .cabecalho-painel .notificacoes-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        .cabecalho-painel h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #b71c1c;
+            margin: 0;
+        }
+        .cabecalho-painel p {
+            color: #607080;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        .stats-grid {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+        }
+        .stat-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px rgba(34,48,74,0.07);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem 2rem 1.5rem 1.5rem;
+            min-width: 240px;
+            min-height: 110px;
+            flex: 1;
+            transition: box-shadow 0.2s;
+        }
+        .stat-card:hover {
+            box-shadow: 0 4px 24px rgba(34,48,74,0.13);
+        }
+        .stat-content {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 90px;
+            flex: 1;
+            text-align: center;
+        }
+        .stat-content h3 {
+            font-size: 2.1rem;
+            font-weight: 700;
+            margin: 0 0 0.2rem 0;
+            color: #22304a;
+        }
+        .stat-content p {
+            font-size: 1rem;
+            color: #607080;
+            margin: 0;
+            font-weight: 500;
+        }
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            background: #d32f2f;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 1.2rem;
+        }
+        .stat-icon i {
+            color: #fff;
+            font-size: 2rem;
+        }
+        .cards-funcionalidades {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+        }
+        .card-funcionalidade {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px rgba(211,47,47,0.07);
+            padding: 2rem 1.5rem 1.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.7rem;
+            cursor: pointer;
+            transition: box-shadow 0.25s, transform 0.18s, border 0.18s;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .card-funcionalidade:hover, .card-funcionalidade:focus {
+            box-shadow: 0 6px 32px rgba(211,47,47,0.18);
+            transform: translateY(-4px) scale(1.025);
+            border: 2px solid #d32f2f;
+            z-index: 2;
+        }
+        .card-funcionalidade svg {
+            width: 2.2em;
+            height: 2.2em;
+            color: #d32f2f;
+            margin-bottom: 0.5rem;
+            transition: color 0.2s;
+        }
+        .card-funcionalidade:hover svg {
+            color: #b71c1c;
+        }
+        .card-funcionalidade h4 {
+            margin: 0 0 0.2rem 0;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #b71c1c;
+        }
+        .card-funcionalidade p {
+            margin: 0 0 0.5rem 0;
+            color: #607080;
+            font-size: 1rem;
+        }
+        .card-funcionalidade a {
+            color: #d32f2f;
+            font-weight: 600;
+            text-decoration: none;
+            margin-top: 0.5rem;
+            transition: color 0.2s;
+        }
+        .card-funcionalidade a:hover {
+            color: #b71c1c;
+            text-decoration: underline;
+        }
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: auto;
+            background: rgba(34,48,74,0.18);
+            animation: fadeInBg 0.3s;
+        }
+        @keyframes fadeInBg {
+            from { background: rgba(34,48,74,0); }
+            to { background: rgba(34,48,74,0.18); }
+        }
+        .modal-content {
+            background: #fff;
+            margin: 3.5rem auto;
+            border-radius: 18px;
+            max-width: 900px;
+            width: 95%;
+            box-shadow: 0 8px 40px rgba(211,47,47,0.13);
+            animation: modalSlideDown 0.35s cubic-bezier(.4,1.6,.6,1);
+            position: relative;
+            padding: 2.2rem 2rem 2rem 2rem;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        @keyframes modalSlideDown {
+            from { transform: translateY(-60px) scale(0.98); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        .modal-content.scrollable {
+            box-shadow: 0 12px 48px rgba(211,47,47,0.18);
+        }
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.2rem;
+        }
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.4rem;
+            color: #b71c1c;
+            font-weight: 700;
+        }
+        .modal-header .close {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #d32f2f;
+            cursor: pointer;
+            transition: color 0.2s;
+            margin-left: 1rem;
+        }
+        .modal-header .close:hover {
+            color: #b71c1c;
+        }
+        .btn-primary, .btn-secondary {
+            border: none;
+            border-radius: 8px;
+            padding: 0.7rem 1.4rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.18s, box-shadow 0.18s, color 0.18s;
+            margin-right: 0.5rem;
+            margin-bottom: 0.2rem;
+        }
+        .btn-primary {
+
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(211,47,47,0.08);
+        }
+        .btn-primary:hover, .btn-primary:focus {
+
+            box-shadow: 0 4px 16px rgba(211,47,47,0.15);
+        }
+        .btn-secondary {
+            background: #fff;
+            color: #d32f2f;
+            border: 2px solid #d32f2f;
+            box-shadow: 0 2px 8px rgba(211,47,47,0.04);
+        }
+        .btn-secondary:hover, .btn-secondary:focus {
+            background: #ffeaea;
+            color: #b71c1c;
+            border-color: #b71c1c;
+        }
+        /* Responsividade melhorada */
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+            .modal-content {
+                max-width: 95vw;
+                margin: 2% auto;
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .painel-container {
+                flex-direction: column;
+            }
+            .menu-lateral {
+                width: 100%;
+                min-width: unset;
+                border-radius: 0 0 32px 32px;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 1.2rem 1.5rem;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            .menu-lateral .perfil-paciente {
+                order: -1;
+                flex: 1;
+                min-width: 200px;
+                margin-bottom: 0;
+            }
+            .menu-lateral .menu-items {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                justify-content: center;
+                flex: 2;
+            }
+            .menu-lateral .menu-items a {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+                white-space: nowrap;
+            }
+            .menu-lateral .btn-sair {
+                margin-top: 0;
+                padding-top: 0;
+                border-top: none;
+                flex: 0 0 auto;
+            }
+            .conteudo-painel {
+                padding: 1.5rem 1rem;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+            .cabecalho-painel {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .notificacoes-container {
+                position: static;
+                margin-top: 1rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .stat-card {
+                padding: 1.2rem;
+            }
+            .stat-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
+            .stat-content h3 {
+                font-size: 1.8rem;
+            }
+            .stat-content p {
+                font-size: 0.9rem;
+            }
+            .modal-content {
+                max-width: 98vw;
+                padding: 1.5rem 1rem;
+                margin: 1% auto;
+            }
+            .form-group input, .form-group select, .form-group textarea {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .modal-content {
+                max-width: 98vw;
+                padding: 1.2rem 0.7rem;
+            }
+            .menu-lateral {
+                padding: 0.7rem 0.5rem;
+            }
+            .cabecalho-painel h2 {
+                font-size: 1.3rem;
+            }
+            .cabecalho-painel h3 {
+                font-size: 1rem;
+            }
+            .stat-card {
+                padding: 1rem;
+            }
+            .stat-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+            .stat-content h3 {
+                font-size: 1.5rem;
+            }
+            .perfil-paciente {
+                padding: 0.8rem;
+            }
+            .foto-paciente {
+                width: 60px;
+                height: 60px;
+            }
+            .info-paciente h4 {
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .conteudo-painel {
+                padding: 1rem 0.5rem;
+            }
+            .stats-grid {
+                gap: 0.8rem;
+            }
+            .stat-card {
+                padding: 0.8rem;
+            }
+            .stat-content h3 {
+                font-size: 1.3rem;
+            }
+            .stat-content p {
+                font-size: 0.8rem;
+            }
+            .modal-content {
+                padding: 1rem 0.5rem;
+            }
+            .form-actions {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+            .btn-secondary, .btn-primary {
+                width: 100%;
+                text-align: center;
+            }
+            .menu-lateral {
+                padding: 0.5rem;
+                gap: 0.5rem;
+            }
+            .menu-lateral .perfil-paciente {
+                min-width: 150px;
+                padding: 0.5rem;
+            }
+            .menu-lateral .menu-items {
+                gap: 0.3rem;
+            }
+            .menu-lateral .menu-items a {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            .foto-paciente {
+                width: 50px;
+                height: 50px;
+            }
+            .info-paciente h4 {
+                font-size: 1rem;
+            }
+            .info-paciente p {
+                font-size: 0.8rem;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .conteudo-painel {
+                padding: 0.8rem 0.3rem;
+            }
+            .stats-grid {
+                gap: 0.6rem;
+            }
+            .stat-card {
+                padding: 0.6rem;
+            }
+            .stat-content h3 {
+                font-size: 1.1rem;
+            }
+            .stat-content p {
+                font-size: 0.75rem;
+            }
+            .menu-lateral {
+                padding: 0.3rem;
+            }
+            .menu-lateral .menu-items a {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.75rem;
+            }
+            .cabecalho-painel h2 {
+                font-size: 1.1rem;
+            }
+            .cabecalho-painel h3 {
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Melhorias para tabelas responsivas */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        table {
+            min-width: 600px;
+            width: 100%;
+        }
+        
+        @media (max-width: 768px) {
+            table {
+                min-width: 500px;
+            }
+            
+            th, td {
+                padding: 0.6rem 0.4rem;
+                font-size: 0.85rem;
+            }
+            
+            .badge {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.5rem;
+            }
+            
+            .btn-action {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            table {
+                min-width: 400px;
+            }
+            
+            th, td {
+                padding: 0.4rem 0.3rem;
+                font-size: 0.8rem;
+            }
+            
+            .badge {
+                font-size: 0.65rem;
+                padding: 0.15rem 0.4rem;
+            }
+            
+            .btn-action {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
+            }
+        }
+        /* Estilos da sidebar seguindo padrão dos outros painéis */
+        .perfil-paciente {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+        .foto-paciente {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(34,48,74,0.10);
+        }
+        .foto-paciente img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .info-paciente h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.15rem;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+        .info-paciente p {
+            margin: 0 0 0.4rem 0;
+            font-size: 1rem;
+            color: rgba(255,255,255,0.7);
+        }
+        .status-online {
+            margin-top: 0.2rem;
+            background: linear-gradient(45deg, #4caf50, #66bb6a);
+            color: #fff;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(76,175,80,0.3);
+        }
+        .info-paciente-detalhada {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 1.5rem;
+        }
+        .info-paciente-detalhada h4 {
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin: 0 0 0.8rem 0;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .info-paciente-detalhada h4:not(:first-child) {
+            margin-top: 1.5rem;
+        }
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        .info-item .label {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .info-item .value {
+            font-weight: 500;
+            color: #e3f2fd;
+        }
+        .btn-sair {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .btn-sair-red {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .btn-sair-red:hover {
+            background: #ffeaea;
+        }
+        .btn-sair-red svg, .btn-sair-red i {
+            color: #d32f2f;
+        }
+        
+        /* Estilos melhorados para os campos do formulário */
+        .form-group {
+            margin-bottom: 2rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.7rem;
+            color: #22304a;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 90%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e3eaf2;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d32f2f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #d32f2f;
+            box-shadow: 0 0 0 3px rgba(211,47,47,0.1);
+            transform: translateY(-1px);
+        }
+        .form-group input:hover, .form-group select:hover, .form-group textarea:hover {
+            border-color: #b71c1c;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .form-group input::placeholder, .form-group textarea::placeholder {
+            color: #9ca3af;
+            font-style: italic;
+        }
+        .form-group select option {
+            padding: 0.5rem;
+            background: #fff;
+            color: #22304a;
+        }
+        .checkbox-group label {
+            font-weight: 500;
+            color: #4b5563;
+            font-size: 0.9rem;
+        }
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 0.5rem;
+            accent-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+<div class="painel-container">
+    <aside class="menu-lateral">
+        <div class="perfil-paciente">
+            <div class="foto-paciente">
+                <img src="https://randomuser.me/api/portraits/men/85.jpg" alt="Gabriel Garcez">
+            </div>
+            <div class="info-paciente">
+                <h4>Gabriel Garcez</h4>
+                <p>Administrador</p>
+                <span class="status-online">Online</span>
+            </div>
+        </div>
+        <div class="info-paciente-detalhada">
+            <h4>Informações Administrativas</h4>
+            <div class="info-item"><span class="label">CPF</span><span class="value">123.456.789-10</span></div>
+            <div class="info-item"><span class="label">Data Nasc.</span><span class="value">22/08/1982</span></div>
+            <div class="info-item"><span class="label">ID Interno</span><span class="value">ADM-0001</span></div>
+            <br>
+            <h4>Contato</h4>
+            <div class="info-item"><span class="label">E-mail</span><span class="value">gabriel.garcez@vidaplus.com</span></div>
+            <div class="info-item"><span class="label">Telefone</span><span class="value">(11) 98888-7777</span></div>
+            <br>
+            <h4>Acesso</h4>
+            <div class="info-item"><span class="label">Último Login</span><span class="value">10/12/2025 09:42</span></div>
+            <div class="info-item"><span class="label">Status</span><span class="value">Ativo</span></div>
+            <div class="info-item"><span class="label">Nível</span><span class="value">Super Admin</span></div>
+        </div>
+        <div class="btn-sair">
+            <button class="btn-sair-red"><i class="fas fa-sign-out-alt"></i> Sair</button>
+        </div>
+    </aside>
+    <main class="conteudo-painel">
+        <header class="cabecalho-painel">
+            <div class="notificacoes-container" style="cursor:pointer;">
+                <i class="fas fa-bell" style="font-size:1.7rem;color:#d32f2f;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"></i>
+                <span class="notificacao-badge" style="position:absolute;top:-8px;right:-8px;background:#FFC107;color:#fff;border:2px solid #FFC107;border-radius:50%;width:20px;height:20px;font-size:0.7rem;display:flex;align-items:center;justify-content:center;font-weight:600;">5</span>
+                <!-- Popup de Notificações -->
+                <div id="notificacoes-popup" style="position:absolute;top:100%;right:0;width:350px;background:white;border-radius:12px;box-shadow:0 8px 25px rgba(0,0,0,0.15);border:1px solid #e0e0e0;z-index:1000;display:none;margin-top:10px;">
+                    <div style="padding:1rem;border-bottom:1px solid #e0e0e0;background:#f8f9fa;border-radius:12px 12px 0 0;">
+                        <h4 style="margin:0;color:#22304a;font-size:1rem;display:flex;align-items:center;gap:0.5rem;">
+                            <i class="fas fa-bell" style="color:#d32f2f;"></i>
+                            Notificações (5)
+                        </h4>
+                    </div>
+                    <div style="max-height:300px;overflow-y:auto;">
+                        <div style="padding:1.5rem;border-bottom:1px solid #f0f0f0;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='white'">
+                            <div style="display:flex;align-items:flex-start;gap:0.8rem;">
+                                <div style="width:8px;height:8px;background:#d32f2f;border-radius:50%;margin-top:0.5rem;flex-shrink:0;"></div>
+                                <div style="flex:1;">
+                                    <div style="font-weight:600;color:#22304a;font-size:0.9rem;margin-bottom:0.2rem;">Novo usuário cadastrado</div>
+                                    <div style="color:#666;font-size:0.8rem;margin-bottom:0.3rem;">Maria Silva foi cadastrada como paciente</div>
+                                    <div style="color:#999;font-size:0.75rem;">Há 5 minutos</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding:1.5rem;border-bottom:1px solid #f0f0f0;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='white'">
+                            <div style="display:flex;align-items:flex-start;gap:0.8rem;">
+                                <div style="width:8px;height:8px;background:#f57c00;border-radius:50%;margin-top:0.5rem;flex-shrink:0;"></div>
+                                <div style="flex:1;">
+                                    <div style="font-weight:600;color:#22304a;font-size:0.9rem;margin-bottom:0.2rem;">Relatório gerado</div>
+                                    <div style="color:#666;font-size:0.8rem;margin-bottom:0.3rem;">Relatório de usuários ativos foi concluído</div>
+                                    <div style="color:#999;font-size:0.75rem;">Há 15 minutos</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding:1.5rem;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='white'">
+                            <div style="display:flex;align-items:flex-start;gap:0.8rem;">
+                                <div style="width:8px;height:8px;background:#1976d2;border-radius:50%;margin-top:0.5rem;flex-shrink:0;"></div>
+                                <div style="flex:1;">
+                                    <div style="font-weight:600;color:#22304a;font-size:0.9rem;margin-bottom:0.2rem;">Sistema atualizado</div>
+                                    <div style="color:#666;font-size:0.8rem;margin-bottom:0.3rem;">Nova versão do sistema foi instalada</div>
+                                    <div style="color:#999;font-size:0.75rem;">Há 1 hora</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding:0.8rem;border-top:1px solid #e0e0e0;background:#f8f9fa;border-radius:0 0 12px 12px;text-align:center;">
+                        <a href="#" style="color:#d32f2f;text-decoration:none;font-size:0.9rem;font-weight:500;">Ver todas as notificações</a>
+                    </div>
+                </div>
+            </div>
+            <h2 style="color:#b71c1c;font-size:2.2rem;font-weight:700;margin-bottom:0.5rem;">Painel do Administrador</h2>
+            <p style="color:#607080;margin-bottom:0.2rem;">Gerencie usuários, permissões, relatórios e configurações do sistema.</p>
+            <span class="data-atual" style="color:#607080;">Quarta-feira, 10 de dezembro de 2025</span>
+        </header>
+        <div class="stats-grid">
+            <div class="stat-card usuarios">
+                <div class="stat-content">
+                    <h3>124</h3>
+                    <p>Usuários ativos</p>
+                </div>
+                <div class="stat-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+            <div class="stat-card permissoes">
+                <div class="stat-content">
+                    <h3>8</h3>
+                    <p>Perfis de permissão</p>
+                </div>
+                <div class="stat-icon">
+                    <i class="fas fa-bullseye"></i>
+                </div>
+            </div>
+            <div class="stat-card relatorios">
+                <div class="stat-content">
+                    <h3>15</h3>
+                    <p>Relatórios gerados</p>
+                </div>
+                <div class="stat-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+            </div>
+        </div>
+        <section class="cards-funcionalidades">
+            <div class="card-funcionalidade" onclick="openModal('modal-usuarios')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <h4>Usuários</h4>
+                <p>Gerencie contas, cadastros e acessos dos usuários.</p>
+                <a href="#" onclick="openModal('modal-usuarios');event.stopPropagation();return false;">Gerenciar Usuários</a>
+            </div>
+            <div class="card-funcionalidade" onclick="openModal('modal-permissoes')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"></path>
+                </svg>
+                <h4>Permissões</h4>
+                <p>Defina e edite perfis de acesso e permissões.</p>
+                <a href="#" onclick="openModal('modal-permissoes');event.stopPropagation();return false;">Gerenciar Permissões</a>
+            </div>
+            <div class="card-funcionalidade" onclick="openModal('modal-relatorios')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <h4>Relatórios</h4>
+                <p>Gere e visualize relatórios do sistema.</p>
+                <a href="#" onclick="openModal('modal-relatorios');event.stopPropagation();return false;">Ver Relatórios</a>
+            </div>
+            <div class="card-funcionalidade" onclick="openModal('modal-documentos')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="4" y="2" width="16" height="20" rx="2"/>
+                    <line x1="8" y1="6" x2="16" y2="6"/>
+                    <line x1="8" y1="10" x2="16" y2="10"/>
+                    <line x1="8" y1="14" x2="12" y2="14"/>
+                </svg>
+                <h4>Documentos</h4>
+                <p>Gerencie documentos administrativos.</p>
+                <a href="#" onclick="openModal('modal-documentos');event.stopPropagation();return false;">Ver Documentos</a>
+            </div>
+            <div class="card-funcionalidade" onclick="openModal('modal-configuracoes')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+                <h4>Configurações</h4>
+                <p>Altere dados do administrador e preferências do sistema.</p>
+                <a href="#" onclick="openModal('modal-configuracoes');event.stopPropagation();return false;">Configurar Sistema</a>
+            </div>
+        </section>
+        <!-- Modais -->
+        <div id="modal-usuarios" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Gerenciamento de Usuários</h3>
+                    <button class="close" onclick="closeModal('modal-usuarios')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="usuarios-section">
+                        <h4>Estatísticas Gerais</h4>
+                        <div class="stats-row" style="display:flex;gap:1rem;margin-bottom:1.5rem;">
+                            <div class="stat-item" style="background:#e8f5e8;padding:0.8rem;border-radius:8px;flex:1;text-align:center;">
+                                <div style="font-size:1.5rem;font-weight:700;color:#2e7d32;">124</div>
+                                <div style="font-size:0.9rem;color:#666;">Usuários Ativos</div>
+                            </div>
+                            <div class="stat-item" style="background:#fff3e0;padding:0.8rem;border-radius:8px;flex:1;text-align:center;">
+                                <div style="font-size:1.5rem;font-weight:700;color:#f57c00;">8</div>
+                                <div style="font-size:0.9rem;color:#666;">Pendentes</div>
+                            </div>
+                            <div class="stat-item" style="background:#fce4ec;padding:0.8rem;border-radius:8px;flex:1;text-align:center;">
+                                <div style="font-size:1.5rem;font-weight:700;color:#c2185b;">3</div>
+                                <div style="font-size:0.9rem;color:#666;">Bloqueados</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="usuarios-section">
+                        <h4>Filtros e Busca</h4>
+                        <div class="filtros-row" style="display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+                            <input type="text" placeholder="Buscar por nome ou email..." style="flex:2;padding:0.7rem;border:1px solid #ddd;border-radius:8px;">
+                            <select style="flex:1;padding:0.7rem;border:1px solid #ddd;border-radius:8px;">
+                                <option>Todos os perfis</option>
+                                <option>Administrador</option>
+                                <option>Profissional</option>
+                                <option>Paciente</option>
+                            </select>
+                            <select style="flex:1;padding:0.7rem;border:1px solid #ddd;border-radius:8px;">
+                                <option>Todos os status</option>
+                                <option>Ativo</option>
+                                <option>Pendente</option>
+                                <option>Bloqueado</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="usuarios-section">
+                        <h4>Lista de Usuários</h4>
+                        <div class="usuarios-table" style="background:#f8f9fa;border-radius:8px;overflow:hidden;">
+                            <div class="table-header" style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;padding:1rem;background:#e9ecef;font-weight:600;color:#495057;">
+                                <div>Nome</div>
+                                <div>Email</div>
+                                <div>Perfil</div>
+                                <div>Status</div>
+                                <div>Ações</div>
+                            </div>
+                            <div class="table-row" style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;padding:1rem;border-bottom:1px solid #dee2e6;align-items:center;">
+                                <div>Maria Silva</div>
+                                <div>maria.silva@email.com</div>
+                                <div><span style="background:#e3f2fd;color:#1976d2;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Paciente</span></div>
+                                <div><span style="background:#e8f5e8;color:#2e7d32;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Ativo</span></div>
+                                <div style="display:flex;gap:0.5rem;">
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Editar</button>
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Bloquear</button>
+                                </div>
+                            </div>
+                            <div class="table-row" style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;padding:1rem;border-bottom:1px solid #dee2e6;align-items:center;">
+                                <div>João Santos</div>
+                                <div>joao.santos@email.com</div>
+                                <div><span style="background:#fff3e0;color:#f57c00;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Profissional</span></div>
+                                <div><span style="background:#e8f5e8;color:#2e7d32;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Ativo</span></div>
+                                <div style="display:flex;gap:0.5rem;">
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Editar</button>
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Bloquear</button>
+                                </div>
+                            </div>
+                            <div class="table-row" style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;padding:1rem;border-bottom:1px solid #dee2e6;align-items:center;">
+                                <div>Ana Costa</div>
+                                <div>ana.costa@email.com</div>
+                                <div><span style="background:#e3f2fd;color:#1976d2;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Paciente</span></div>
+                                <div><span style="background:#fff3e0;color:#f57c00;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Pendente</span></div>
+                                <div style="display:flex;gap:0.5rem;">
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Aprovar</button>
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Rejeitar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="usuarios-section">
+                        <h4>Adicionar Novo Usuário</h4>
+                        <div class="novo-usuario-card" style="background:#fff;border:2px dashed #d32f2f;border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;" onclick="openModal('modal-novo-usuario')">
+                            <div style="font-size:3rem;color:#d32f2f;margin-bottom:0.5rem;">+</div>
+                            <div style="font-size:1.1rem;font-weight:600;color:#d32f2f;margin-bottom:0.3rem;">Adicionar Novo Usuário</div>
+                            <div style="font-size:0.9rem;color:#666;">Clique para abrir o formulário</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="modal-permissoes" class="modal">
+            <div class="modal-content" style="width:1200px;max-width:95vw;">
+                <div class="modal-header">
+                    <h3>Gerenciamento de Permissões</h3>
+                    <button class="close" onclick="closeModal('modal-permissoes')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="permissoes-section">
+                        <h4>Estatísticas de Perfis</h4>
+                        <div class="stats-row" style="display:flex;gap:1rem;margin-bottom:1.5rem;">
+                            <div class="stat-item" style="background:#e8f5e8;padding:0.8rem;border-radius:8px;flex:1;text-align:center;">
+                                <div style="font-size:1.5rem;font-weight:700;color:#2e7d32;">8</div>
+                                <div style="font-size:0.9rem;color:#666;">Perfis Ativos</div>
+                            </div>
+                            <div class="stat-item" style="background:#fff3e0;padding:0.8rem;border-radius:8px;flex:1;text-align:center;">
+                                <div style="font-size:1.5rem;font-weight:700;color:#f57c00;">124</div>
+                                <div style="font-size:0.9rem;color:#666;">Usuários Vinculados</div>
+                            </div>
+                            <div class="stat-item" style="background:#fce4ec;padding:0.8rem;border-radius:8px;flex:1;text-align:center;">
+                                <div style="font-size:1.5rem;font-weight:700;color:#c2185b;">15</div>
+                                <div style="font-size:0.9rem;color:#666;">Permissões Especiais</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="permissoes-section">
+                        <h4>Filtros e Ações</h4>
+                        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;align-items:center;">
+                            <select style="padding:0.5rem;border:1px solid #ddd;border-radius:6px;background:#fff;">
+                                <option>Todos os Perfis</option>
+                                <option>Administradores</option>
+                                <option>Profissionais</option>
+                                <option>Pacientes</option>
+                            </select>
+                            <input type="text" placeholder="Buscar perfil..." style="padding:0.5rem;border:1px solid #ddd;border-radius:6px;flex:1;">
+                            <button class="btn-primary" style="padding:0.5rem 1rem;">
+                                <i class="fas fa-search" style="margin-right:0.3rem;"></i>Buscar
+                            </button>
+                            <button class="btn-secondary" style="padding:0.5rem 1rem;">
+                                <i class="fas fa-download" style="margin-right:0.3rem;"></i>Exportar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="permissoes-section">
+                        <h4>Perfis de Acesso</h4>
+                        <div style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;background:#f8f9fa;border-bottom:1px solid #dee2e6;font-weight:600;color:#495057;">
+                                <div>Nome do Perfil</div>
+                                <div>Usuários</div>
+                                <div>Permissões</div>
+                                <div>Status</div>
+                                <div>Ações</div>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;border-bottom:1px solid #f1f3f4;align-items:center;">
+                                <div style="font-weight:600;color:#22304a;">Super Administrador</div>
+                                <div>3 usuários</div>
+                                <div><span style="background:#e3f2fd;color:#1976d2;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Todas</span></div>
+                                <div><span style="background:#e8f5e8;color:#2e7d32;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Ativo</span></div>
+                                <div style="display:flex;gap:0.5rem;">
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Editar</button>
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Duplicar</button>
+                                </div>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;border-bottom:1px solid #f1f3f4;align-items:center;">
+                                <div style="font-weight:600;color:#22304a;">Administrador</div>
+                                <div>5 usuários</div>
+                                <div><span style="background:#fff3e0;color:#f57c00;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Limitadas</span></div>
+                                <div><span style="background:#e8f5e8;color:#2e7d32;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Ativo</span></div>
+                                <div style="display:flex;gap:0.5rem;">
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Editar</button>
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Duplicar</button>
+                                </div>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;border-bottom:1px solid #f1f3f4;align-items:center;">
+                                <div style="font-weight:600;color:#22304a;">Profissional</div>
+                                <div>45 usuários</div>
+                                <div><span style="background:#e8f5e8;color:#2e7d32;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Módulo</span></div>
+                                <div><span style="background:#e8f5e8;color:#2e7d32;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Ativo</span></div>
+                                <div style="display:flex;gap:0.5rem;">
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Editar</button>
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Duplicar</button>
+                                </div>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;align-items:center;">
+                                <div style="font-weight:600;color:#22304a;">Paciente</div>
+                                <div>71 usuários</div>
+                                <div><span style="background:#fce4ec;color:#c2185b;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Básicas</span></div>
+                                <div><span style="background:#e8f5e8;color:#2e7d32;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Ativo</span></div>
+                                <div style="display:flex;gap:0.5rem;">
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Editar</button>
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Duplicar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="permissoes-section">
+                        <h4>Adicionar Novo Perfil</h4>
+                        <div class="novo-perfil-card" style="background:#fff;border:2px dashed #d32f2f;border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;" onclick="openModal('modal-novo-perfil')">
+                            <div style="font-size:3rem;color:#d32f2f;margin-bottom:0.5rem;">+</div>
+                            <div style="font-size:1.1rem;font-weight:600;color:#d32f2f;margin-bottom:0.3rem;">Criar Novo Perfil</div>
+                            <div style="font-size:0.9rem;color:#666;">Clique para configurar permissões</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="modal-relatorios" class="modal">
+            <div class="modal-content" style="width:1200px;max-width:95vw;">
+                <div class="modal-header">
+                    <h3>Gerenciamento de Relatórios</h3>
+                    <button class="close" onclick="closeModal('modal-relatorios')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="relatorios-section">
+                        <h4>Estatísticas de Relatórios</h4>
+                        <div class="stats-row" style="display:flex;gap:1rem;margin-bottom:1.5rem;">
+                            <div class="stat-item" style="background:#e8f5e8;padding:0.8rem;border-radius:8px;flex:1;text-align:center;">
+                                <div style="font-size:1.5rem;font-weight:700;color:#2e7d32;">15</div>
+                                <div style="font-size:0.9rem;color:#666;">Relatórios Gerados</div>
+                            </div>
+                            <div class="stat-item" style="background:#fff3e0;padding:0.8rem;border-radius:8px;flex:1;text-align:center;">
+                                <div style="font-size:1.5rem;font-weight:700;color:#f57c00;">8</div>
+                                <div style="font-size:0.9rem;color:#666;">Templates Ativos</div>
+                            </div>
+                            <div class="stat-item" style="background:#fce4ec;padding:0.8rem;border-radius:8px;flex:1;text-align:center;">
+                                <div style="font-size:1.5rem;font-weight:700;color:#c2185b;">3</div>
+                                <div style="font-size:0.9rem;color:#666;">Agendados</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relatorios-section">
+                        <h4>Filtros e Ações</h4>
+                        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;align-items:center;">
+                            <select style="padding:0.5rem;border:1px solid #ddd;border-radius:6px;background:#fff;">
+                                <option>Todos os Tipos</option>
+                                <option>Usuários</option>
+                                <option>Consultas</option>
+                                <option>Financeiro</option>
+                                <option>Auditoria</option>
+                            </select>
+                            <input type="date" style="padding:0.5rem;border:1px solid #ddd;border-radius:6px;background:#fff;">
+                            <input type="date" style="padding:0.5rem;border:1px solid #ddd;border-radius:6px;background:#fff;">
+                            <button class="btn-primary" style="padding:0.5rem 1rem;">
+                                <i class="fas fa-search" style="margin-right:0.3rem;"></i>Filtrar
+                            </button>
+                            <button class="btn-secondary" style="padding:0.5rem 1rem;">
+                                <i class="fas fa-download" style="margin-right:0.3rem;"></i>Exportar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="relatorios-section">
+                        <h4>Relatórios Disponíveis</h4>
+                        <div style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;background:#f8f9fa;border-bottom:1px solid #dee2e6;font-weight:600;color:#495057;">
+                                <div>Nome do Relatório</div>
+                                <div>Tipo</div>
+                                <div>Última Geração</div>
+                                <div>Status</div>
+                                <div>Ações</div>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;border-bottom:1px solid #f1f3f4;align-items:center;">
+                                <div style="font-weight:600;color:#22304a;">Usuários Ativos</div>
+                                <div><span style="background:#e3f2fd;color:#1976d2;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Usuários</span></div>
+                                <div>09/12/2025 14:30</div>
+                                <div><span style="background:#e8f5e8;color:#2e7d32;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Concluído</span></div>
+                                <div style="display:flex;gap:0.5rem;">
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Visualizar</button>
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Download</button>
+                                </div>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;border-bottom:1px solid #f1f3f4;align-items:center;">
+                                <div style="font-weight:600;color:#22304a;">Consultas Realizadas</div>
+                                <div><span style="background:#fff3e0;color:#f57c00;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Consultas</span></div>
+                                <div>08/12/2025 16:45</div>
+                                <div><span style="background:#e8f5e8;color:#2e7d32;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Concluído</span></div>
+                                <div style="display:flex;gap:0.5rem;">
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Visualizar</button>
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Download</button>
+                                </div>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;border-bottom:1px solid #f1f3f4;align-items:center;">
+                                <div style="font-weight:600;color:#22304a;">Relatório Financeiro</div>
+                                <div><span style="background:#fce4ec;color:#c2185b;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Financeiro</span></div>
+                                <div>07/12/2025 09:15</div>
+                                <div><span style="background:#fff3e0;color:#f57c00;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Processando</span></div>
+                                <div style="display:flex;gap:0.5rem;">
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Aguardar</button>
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Cancelar</button>
+                                </div>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;align-items:center;">
+                                <div style="font-weight:600;color:#22304a;">Auditoria de Acessos</div>
+                                <div><span style="background:#e8f5e8;color:#2e7d32;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Auditoria</span></div>
+                                <div>06/12/2025 11:20</div>
+                                <div><span style="background:#e8f5e8;color:#2e7d32;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Concluído</span></div>
+                                <div style="display:flex;gap:0.5rem;">
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Visualizar</button>
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Download</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relatorios-section">
+                        <h4>Criar Novo Relatório</h4>
+                        <div class="novo-relatorio-card" style="background:#fff;border:2px dashed #d32f2f;border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;" onclick="openModal('modal-novo-relatorio')">
+                            <div style="font-size:3rem;color:#d32f2f;margin-bottom:0.5rem;">+</div>
+                            <div style="font-size:1.1rem;font-weight:600;color:#d32f2f;margin-bottom:0.3rem;">Gerar Novo Relatório</div>
+                            <div style="font-size:0.9rem;color:#666;">Clique para configurar parâmetros</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="modal-documentos" class="modal">
+            <div class="modal-content" style="width:1200px;max-width:95vw;">
+                <div class="modal-header">
+                    <h3>Gerenciamento de Documentos</h3>
+                    <button class="close" onclick="closeModal('modal-documentos')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="documentos-section">
+                        <h4>Estatísticas de Documentos</h4>
+                        <div class="stats-row" style="display:flex;gap:1rem;margin-bottom:1.5rem;">
+                            <div class="stat-item" style="background:#e8f5e8;padding:0.8rem;border-radius:8px;flex:1;text-align:center;">
+                                <div style="font-size:1.5rem;font-weight:700;color:#2e7d32;">24</div>
+                                <div style="font-size:0.9rem;color:#666;">Documentos Ativos</div>
+                            </div>
+                            <div class="stat-item" style="background:#fff3e0;padding:0.8rem;border-radius:8px;flex:1;text-align:center;">
+                                <div style="font-size:1.5rem;font-weight:700;color:#f57c00;">156</div>
+                                <div style="font-size:0.9rem;color:#666;">Downloads</div>
+                            </div>
+                            <div class="stat-item" style="background:#fce4ec;padding:0.8rem;border-radius:8px;flex:1;text-align:center;">
+                                <div style="font-size:1.5rem;font-weight:700;color:#c2185b;">8</div>
+                                <div style="font-size:0.9rem;color:#666;">Pendentes Revisão</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="documentos-section">
+                        <h4>Filtros e Ações</h4>
+                        <div style="display:flex;gap:1rem;margin-bottom:1.5rem;align-items:center;">
+                            <select style="padding:0.5rem;border:1px solid #ddd;border-radius:6px;background:#fff;">
+                                <option>Todas as Categorias</option>
+                                <option>Políticas</option>
+                                <option>Manuais</option>
+                                <option>Formulários</option>
+                                <option>Regulamentos</option>
+                            </select>
+                            <input type="text" placeholder="Buscar documento..." style="padding:0.5rem;border:1px solid #ddd;border-radius:6px;flex:1;">
+                            <button class="btn-primary" style="padding:0.5rem 1rem;">
+                                <i class="fas fa-search" style="margin-right:0.3rem;"></i>Buscar
+                            </button>
+                            <button class="btn-secondary" style="padding:0.5rem 1rem;">
+                                <i class="fas fa-upload" style="margin-right:0.3rem;"></i>Upload
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="documentos-section">
+                        <h4>Documentos Disponíveis</h4>
+                        <div style="background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;background:#f8f9fa;border-bottom:1px solid #dee2e6;font-weight:600;color:#495057;">
+                                <div>Nome do Documento</div>
+                                <div>Categoria</div>
+                                <div>Última Atualização</div>
+                                <div>Status</div>
+                                <div>Ações</div>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;border-bottom:1px solid #f1f3f4;align-items:center;">
+                                <div style="font-weight:600;color:#22304a;">Regulamento Interno</div>
+                                <div><span style="background:#e3f2fd;color:#1976d2;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Regulamentos</span></div>
+                                <div>07/12/2025 10:30</div>
+                                <div><span style="background:#e8f5e8;color:#2e7d32;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Ativo</span></div>
+                                <div style="display:flex;gap:0.5rem;">
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Visualizar</button>
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Download</button>
+                                </div>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;border-bottom:1px solid #f1f3f4;align-items:center;">
+                                <div style="font-weight:600;color:#22304a;">Política de Privacidade</div>
+                                <div><span style="background:#fff3e0;color:#f57c00;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Políticas</span></div>
+                                <div>05/12/2025 14:15</div>
+                                <div><span style="background:#e8f5e8;color:#2e7d32;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Ativo</span></div>
+                                <div style="display:flex;gap:0.5rem;">
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Visualizar</button>
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Download</button>
+                                </div>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;border-bottom:1px solid #f1f3f4;align-items:center;">
+                                <div style="font-weight:600;color:#22304a;">Manual do Usuário</div>
+                                <div><span style="background:#e8f5e8;color:#2e7d32;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Manuais</span></div>
+                                <div>03/12/2025 09:45</div>
+                                <div><span style="background:#fff3e0;color:#f57c00;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Revisão</span></div>
+                                <div style="display:flex;gap:0.5rem;">
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Editar</button>
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Aprovar</button>
+                                </div>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:1rem;padding:1rem;align-items:center;">
+                                <div style="font-weight:600;color:#22304a;">Formulário de Cadastro</div>
+                                <div><span style="background:#fce4ec;color:#c2185b;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Formulários</span></div>
+                                <div>01/12/2025 16:20</div>
+                                <div><span style="background:#e8f5e8;color:#2e7d32;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.8rem;">Ativo</span></div>
+                                <div style="display:flex;gap:0.5rem;">
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Visualizar</button>
+                                    <button class="btn-secondary" style="padding:0.3rem 0.6rem;font-size:0.8rem;">Download</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="documentos-section">
+                        <h4>Adicionar Novo Documento</h4>
+                        <div class="novo-documento-card" style="background:#fff;border:2px dashed #d32f2f;border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;" onclick="openModal('modal-novo-documento')">
+                            <div style="font-size:3rem;color:#d32f2f;margin-bottom:0.5rem;">+</div>
+                            <div style="font-size:1.1rem;font-weight:600;color:#d32f2f;margin-bottom:0.3rem;">Adicionar Documento</div>
+                            <div style="font-size:0.9rem;color:#666;">Clique para fazer upload</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="modal-configuracoes" class="modal">
+            <div class="modal-content" style="width:1200px;max-width:95vw;">
+                <div class="modal-header">
+                    <h3>Configurações do Sistema</h3>
+                    <button class="close" onclick="closeModal('modal-configuracoes')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="config-section">
+                        <h4>Informações do Administrador</h4>
+                        <form class="dados-admin-form" style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;">
+                            <div class="form-group">
+                                <label for="nome-admin"><i class="fas fa-user" style="margin-right:0.3rem;color:#d32f2f;"></i>Nome Completo</label>
+                                <input type="text" id="nome-admin" value="Gabriel Garcez" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email-admin"><i class="fas fa-envelope" style="margin-right:0.3rem;color:#d32f2f;"></i>E-mail</label>
+                                <input type="email" id="email-admin" value="gabriel.garcez@vidaplus.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cpf-admin"><i class="fas fa-id-card" style="margin-right:0.3rem;color:#d32f2f;"></i>CPF</label>
+                                <input type="text" id="cpf-admin" value="123.456.789-10" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="telefone-admin"><i class="fas fa-phone" style="margin-right:0.3rem;color:#d32f2f;"></i>Telefone</label>
+                                <input type="tel" id="telefone-admin" value="(11) 98888-7777" required>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="config-section" style="margin-top:2.5rem;">
+                        <h4>Configurações de Segurança</h4>
+                        <form class="seguranca-form" style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;">
+                            <div class="form-group">
+                                <label for="senha-atual"><i class="fas fa-lock" style="margin-right:0.3rem;color:#d32f2f;"></i>Senha Atual</label>
+                                <input type="password" id="senha-atual" placeholder="Digite sua senha atual">
+                            </div>
+                            <div class="form-group">
+                                <label for="nova-senha"><i class="fas fa-key" style="margin-right:0.3rem;color:#d32f2f;"></i>Nova Senha</label>
+                                <input type="password" id="nova-senha" placeholder="Digite a nova senha">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmar-nova-senha"><i class="fas fa-check-circle" style="margin-right:0.3rem;color:#d32f2f;"></i>Confirmar Nova Senha</label>
+                                <input type="password" id="confirmar-nova-senha" placeholder="Confirme a nova senha">
+                            </div>
+                            <div class="form-group">
+                                <label for="pergunta-seguranca"><i class="fas fa-question-circle" style="margin-right:0.3rem;color:#d32f2f;"></i>Pergunta de Segurança</label>
+                                <select id="pergunta-seguranca">
+                                    <option>Qual é o nome do seu primeiro pet?</option>
+                                    <option>Em que cidade você nasceu?</option>
+                                    <option>Qual é o nome da sua mãe?</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="config-section" style="margin-top:2.5rem;">
+                        <h4>Preferências do Sistema</h4>
+                        <form class="preferencias-form" style="display:grid;grid-template-columns:1fr;gap:1.5rem;">
+                            <div class="checkbox-group" style="display:flex;gap:2rem;flex-wrap:wrap;">
+                                <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
+                                    <input type="checkbox" id="notificacoes-email" checked>
+                                    <span>Receber notificações por e-mail</span>
+                                </label>
+                                <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
+                                    <input type="checkbox" id="autenticacao-2fatores">
+                                    <span>Ativar autenticação de dois fatores</span>
+                                </label>
+                                <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
+                                    <input type="checkbox" id="sessao-persistente" checked>
+                                    <span>Manter sessão ativa</span>
+                                </label>
+                                <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
+                                    <input type="checkbox" id="log-atividades" checked>
+                                    <span>Registrar atividades no log</span>
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="form-actions" style="display:flex;gap:1rem;justify-content:flex-end;margin-top:2rem;padding-top:1.5rem;border-top:1px solid #dee2e6;">
+                        <button type="button" class="btn-secondary" onclick="closeModal('modal-configuracoes')">
+                            <i class="fas fa-times" style="margin-right:0.5rem;"></i>Cancelar
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save" style="margin-right:0.5rem;"></i>Salvar Configurações
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Novo Usuário -->
+        <div id="modal-novo-usuario" class="modal">
+            <div class="modal-content" style="max-width:1000px;">
+                <div class="modal-header">
+                    <h3>Adicionar Novo Usuário</h3>
+                    <button class="close" onclick="closeModal('modal-novo-usuario')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-section">
+                        <h4 style="color:#d32f2f;border-bottom:2px solid #d32f2f;padding-bottom:0.5rem;margin-bottom:1.5rem;">
+                            <i class="fas fa-user-plus" style="margin-right:0.5rem;"></i>Dados Pessoais
+                        </h4>
+                        <form class="novo-usuario-form" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+                            <div class="form-group">
+                                <label for="nome-usuario"><i class="fas fa-user" style="margin-right:0.3rem;color:#d32f2f;"></i>Nome Completo</label>
+                                <input type="text" id="nome-usuario" placeholder="Digite o nome completo" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email-usuario"><i class="fas fa-envelope" style="margin-right:0.3rem;color:#d32f2f;"></i>E-mail</label>
+                                <input type="email" id="email-usuario" placeholder="usuario@exemplo.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cpf-usuario"><i class="fas fa-id-card" style="margin-right:0.3rem;color:#d32f2f;"></i>CPF</label>
+                                <input type="text" id="cpf-usuario" placeholder="000.000.000-00" maxlength="14" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="data-nascimento"><i class="fas fa-calendar" style="margin-right:0.3rem;color:#d32f2f;"></i>Data de Nascimento</label>
+                                <input type="date" id="data-nascimento" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="telefone-usuario"><i class="fas fa-phone" style="margin-right:0.3rem;color:#d32f2f;"></i>Telefone</label>
+                                <input type="tel" id="telefone-usuario" placeholder="(00) 00000-0000" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="celular-usuario"><i class="fas fa-mobile-alt" style="margin-right:0.3rem;color:#d32f2f;"></i>Celular</label>
+                                <input type="tel" id="celular-usuario" placeholder="(00) 00000-0000">
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="form-section" style="margin-top:2.5rem;">
+                        <h4 style="color:#d32f2f;border-bottom:2px solid #d32f2f;padding-bottom:0.5rem;margin-bottom:1.5rem;">
+                            <i class="fas fa-shield-alt" style="margin-right:0.5rem;"></i>Configurações de Acesso
+                        </h4>
+                        <form class="acesso-form" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+                            <div class="form-group">
+                                <label for="perfil-usuario"><i class="fas fa-users" style="margin-right:0.3rem;color:#d32f2f;"></i>Perfil de Acesso</label>
+                                <select id="perfil-usuario" required>
+                                    <option value="">Selecione o perfil</option>
+                                    <option value="paciente">Paciente</option>
+                                    <option value="profissional">Profissional</option>
+                                    <option value="admin">Administrador</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="status-usuario"><i class="fas fa-toggle-on" style="margin-right:0.3rem;color:#d32f2f;"></i>Status da Conta</label>
+                                <select id="status-usuario" required>
+                                    <option value="ativo">Ativo</option>
+                                    <option value="pendente">Pendente</option>
+                                    <option value="bloqueado">Bloqueado</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="senha-usuario"><i class="fas fa-lock" style="margin-right:0.3rem;color:#d32f2f;"></i>Senha Inicial</label>
+                                <input type="password" id="senha-usuario" placeholder="Mínimo 8 caracteres" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmar-senha"><i class="fas fa-lock" style="margin-right:0.3rem;color:#d32f2f;"></i>Confirmar Senha</label>
+                                <input type="password" id="confirmar-senha" placeholder="Confirme a senha" required>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="form-section" style="margin-top:2.5rem;">
+                        <h4 style="color:#d32f2f;border-bottom:2px solid #d32f2f;padding-bottom:0.5rem;margin-bottom:1.5rem;">
+                            <i class="fas fa-cog" style="margin-right:0.5rem;"></i>Configurações Adicionais
+                        </h4>
+                        <form class="config-form" style="display:grid;grid-template-columns:1fr;gap:1.5rem;">
+                            <div class="form-group">
+                                <label for="observacoes-usuario"><i class="fas fa-sticky-note" style="margin-right:0.3rem;color:#d32f2f;"></i>Observações</label>
+                                <textarea id="observacoes-usuario" rows="3" placeholder="Observações adicionais sobre o usuário..."></textarea>
+                            </div>
+                            <div class="checkbox-group" style="display:flex;gap:2rem;flex-wrap:wrap;">
+                                <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
+                                    <input type="checkbox" id="enviar-email" checked>
+                                    <span>Enviar e-mail de boas-vindas</span>
+                                </label>
+                                <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
+                                    <input type="checkbox" id="forcar-troca-senha" checked>
+                                    <span>Forçar troca de senha no primeiro login</span>
+                                </label>
+                                <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
+                                    <input type="checkbox" id="ativar-notificacoes">
+                                    <span>Ativar notificações por e-mail</span>
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="form-actions" style="display:flex;gap:1rem;justify-content:flex-end;margin-top:2rem;padding-top:1.5rem;border-top:1px solid #dee2e6;">
+                        <button type="button" class="btn-secondary" onclick="closeModal('modal-novo-usuario')">
+                            <i class="fas fa-times" style="margin-right:0.5rem;"></i>Cancelar
+                        </button>
+                        <button type="submit" class="btn-primary" onclick="salvarUsuario()">
+                            <i class="fas fa-save" style="margin-right:0.5rem;"></i>Adicionar Usuário
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<script>
+    function checkModalScroll() {
+        const modals = document.querySelectorAll('.modal-content');
+        modals.forEach(modal => {
+            if (modal.scrollHeight > modal.clientHeight) {
+                modal.classList.add('scrollable');
+            } else {
+                modal.classList.remove('scrollable');
+            }
+        });
+    }
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+        setTimeout(checkModalScroll, 100);
+    }
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+    window.onclick = function(event) {
+        if (event.target.classList && event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    }
+    window.addEventListener('resize', checkModalScroll);
+    
+    function toggleForm(formId) {
+        const form = document.getElementById(formId);
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
+        }
+    }
+    
+    function salvarUsuario() {
+        // Aqui você pode adicionar a lógica para salvar o usuário
+        alert('Usuário adicionado com sucesso!');
+        closeModal('modal-novo-usuario');
+    }
+</script>
+</body>
+</html> 
